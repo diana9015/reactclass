@@ -11,7 +11,7 @@ function Header(props) {
 			<div className='inner'>
 				<h1>
 					<NavLink exact to='/' activeStyle={active}>
-						Logo
+						<img src={props.logoSrc} />
 					</NavLink>
 				</h1>
 
@@ -29,6 +29,11 @@ function Header(props) {
 					<li>
 						<NavLink to='/youtube' activeStyle={active}>
 							Youtube
+						</NavLink>
+					</li>
+					<li>
+						<NavLink to='/location' activeStyle={active}>
+							Location
 						</NavLink>
 					</li>
 				</ul>

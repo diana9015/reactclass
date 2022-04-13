@@ -1,26 +1,108 @@
-import React, { useEffect, useRef } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import Layout from '../common/Layout';
+import Popup from '../common/Popup';
 
 function Gallery() {
-	let frame = useRef(null);
+	const key = '89aae050d1d8c006bdb5bf866029199d';
+	const method1 = 'flickr.interestingness.getList';
+	const num = 20;
+	const url = `https://www.flickr.com/services/rest/?method=${method1}&per_page=${num}&api_key=${key}&format=json&nojsoncallback=1`;
+
+	const [items, setItems] = useState([]);
+	const [open, setOpen] = useState(false);
+	const [index, setIndex] = useState(0);
 
 	useEffect(() => {
-		console.log('갤러리 컴포넌트 생성');
-		frame.current.classList.add('on');
-
-		return () => {
-			console.log('갤러리 컴포넌트 소멸');
-		};
+		axios.get(url).then((json) => {
+			console.log(json.data.photos.photo);
+			setItems(json.data.photos.photo);
+		});
 	}, []);
 
 	return (
-		<section className='content gallery' ref={frame}>
-			<figure></figure>
+		<>
+			<Layout name={'Gallery'}>
+				<ul>
+					{items.map((item, idx) => {
+						return (
+							<li
+								key={idx}
+								onClick={() => {
+									setOpen(true);
+									setIndex(idx);
+								}}>
+								<div className='inner'>
+									<div className='pic'>
+										<img
+											src={`https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_m.jpg`}
+										/>
+									</div>
+									<h2>{item.title}</h2>
+								</div>
+							</li>
+						);
+					})}
+				</ul>
+			</Layout>
 
-			<div className='inner'>
-				<h1>Gallery</h1>
-			</div>
-		</section>
+			{open ? (
+				<Popup setOpen={setOpen}>
+					<img
+						src={`https://live.staticflickr.com/${items[index].server}/${items[index].id}_${items[index].secret}_b.jpg`}
+					/>
+				</Popup>
+			) : null}
+		</>
 	);
 }
 
 export default Gallery;
+
+// key 9345604176e23c5734deedc68bbd25ac
+
+// 비밀:
+// e19422ce52377fae
+
+//또머니?  e19422ce52377fae
+
+// import Layout from '../common/Layout';
+// import styled from 'styled-components';
+// import axios from 'axios';
+// import { useEffect, useState } from 'react';
+
+// function Gallery() {
+// 	useEffect(() => {
+// 		const base = 'https://www.flickr.com/services/rest/?';
+// 		const method_interest = 'flickr.interestingness.getList';
+// 		const key = '9345604176e23c5734deedc68bbd25ac';
+// 		const per_page = 50;
+// 		const url = `${base}method=${method_interest}&api_key=${key}&per_page=${per_page}&format=json&nojsoncallback=1`;
+// 		axios.get(url).then((json) => {
+// 			console.log(json.data.photos.photo);
+// 		});
+// 	}, []);
+// 	const [items, setItems] = useState([]);
+
+// 	console.log(items);
+
+// 	return (
+// 		<>
+// 			<Layout name={'Gallery'}>
+// 				{/* <Box></Box>
+// 			<LinkBtn>버튼</LinkBtn> */}
+
+// 				{items.map((item, idx) => {
+// 					return (
+// 						//클릭 이벤트 발생 시 oepn값 true로 변경
+
+// 						<article key={idx}></article>
+// 					);
+// 				})}
+// 				<div className='box2'></div>
+// 			</Layout>
+// 		</>
+// 	);
+// }
+
+// export default Gallery;

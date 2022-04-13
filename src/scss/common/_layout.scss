@@ -1,11 +1,12 @@
 .content {
+	background: #efefef;
 	figure {
 		width: 100%;
 		height: 300px;
 		background: #bbb;
 	}
 
-	.inner {
+	> .inner {
 		width: 1180px;
 		min-height: 400px;
 		margin: 100px auto 150px;
@@ -22,7 +23,7 @@
 	}
 
 	&.on {
-		.inner {
+		> .inner {
 			transform: translateY(0px);
 			opacity: 1;
 		}
@@ -31,7 +32,7 @@
 
 @media screen and (max-width: $tablet) {
 	.content {
-		.inner {
+		> .inner {
 			width: 100%;
 			padding: 0px 40px;
 		}

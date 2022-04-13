@@ -13,25 +13,29 @@ import Content from './components/main/Content';
 import Youtube from './components/sub/Youtube';
 import Gallery from './components/sub/Gallery';
 import Member from './components/sub/Member';
+import Location from './components/sub/Location';
+
+const path = process.env.PUBLIC_URL;
 
 function App() {
 	return (
 		<>
 			<Switch>
 				<Route exact path='/'>
-					<Header type={'main'} />
+					<Header type={'main'} logoSrc={`${path}/img/logo1.png`} />
 					<Visual />
 					<Content />
 				</Route>
 
 				<Route path='/'>
-					<Header type={'sub'} />
+					<Header type={'sub'} logoSrc={`${path}/img/logo2.png`} />
 				</Route>
 			</Switch>
 
 			<Route path='/youtube' component={Youtube} />
 			<Route path='/gallery' component={Gallery} />
 			<Route path='/member' component={Member} />
+			<Route path='/location' component={Location} />
 
 			<Footer />
 		</>
