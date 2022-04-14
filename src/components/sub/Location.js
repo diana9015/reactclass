@@ -4,34 +4,49 @@ import Layout from '../common/Layout';
 function Location() {
 	const container = useRef(null);
 	const { kakao } = window;
-	//카카오맵 api를 통해서 생성된 인스턴스를 옮겨담을 state추가
-	const [map, setMap] = useState({});
+	const [map, setMap] = useState(null);
+	const [traffic, setTraffic] = useState(false);
 
 	useEffect(() => {
 		const options = {
-			center: new kakao.maps.LatLng(33.450701, 126.570667),
+			center: new kakao.maps.LatLng(37.512742, 127.06081),
 			level: 3,
 		};
 
-		const map = new kakao.maps.Map(container.current, options);
-		//인스턴스 map을 state map으로 옮겨담음
-		setMap(map);
+		const mapInfo = new kakao.maps.Map(container.current, options);
+		setMap(mapInfo);
+
+		//마커 위치 인스턴스 생성
+		const markerPosition = new kakao.maps.LatLng(37.512742, 127.06081);
+
+		// 마커를 생성합니다
+		const marker = new kakao.maps.Marker({
+			position: markerPosition,
+		});
+
+		// 마커가 지도 위에 표시되도록 설정합니다
+		marker.setMap(mapInfo);
 	}, []);
+
+	useEffect(() => {
+		console.log(traffic);
+		handleTraffic();
+	}, [traffic]);
+
+	const handleTraffic = () => {
+		console.log(map);
+		if (map) {
+			traffic
+				? map.addOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC)
+				: map.removeOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC);
+		}
+	};
 
 	return (
 		<Layout name={'Location'}>
 			<div id='map' ref={container}></div>
-
-			{/* 버튼 클릭시 각각 트래픽정보 on / off */}
-			<button
-				onClick={() => map.addOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC)}>
-				Traffic ON
-			</button>
-			<button
-				onClick={() =>
-					map.removeOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC)
-				}>
-				Traffic OFF
+			<button onClick={() => setTraffic(!traffic)}>
+				{traffic ? 'Traffic OFF' : 'Traffic On'}
 			</button>
 		</Layout>
 	);
